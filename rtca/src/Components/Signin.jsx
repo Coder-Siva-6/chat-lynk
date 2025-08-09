@@ -37,7 +37,7 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL
             setPopup(false)
             setSuccess('')
           }, 4000);
-          window.open('/login')
+          window.open('/')
 
         }).catch((err) => {
 
