@@ -10,8 +10,8 @@ const jwt = require('jsonwebtoken');
         maxAge: 7 * 24 *60 * 60*1000,
         httpOnly:true,
         
-         sameSite:"strict",
-       // sameSite:"none",
+        // sameSite:"strict", it blocks cookie when front and back both are deply by a sigle deler like render
+       sameSite:"none",
         //secure:process.env.NODE_ENV !== " development"
         secure:true
     }).json({message:'login successs from jwt',token})
