@@ -8,12 +8,11 @@ const PrivateRoute = ({ children }) => {
 
   const [user, setUser] = useState(null);
 
-   
   const navigate = useNavigate();
 const backendUrl = import.meta.env.VITE_BACKEND_URL 
  
   useEffect(() => {
-    axios.get(`${backendUrl}/validate`, {
+    axios.get(`${backendUrl}/validate/123`, {
       withCredentials: true
     })
  .then((res) => {

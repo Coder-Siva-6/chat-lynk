@@ -1,12 +1,13 @@
-import User from '../models/db.model.js'
-import bcrypt from 'bcrypt'
- import { generateToken }from './jwt.token.js'
+
+const {generateToken} = require('./jwt.token.js');
+const bcrypt = require('bcrypt');
+const User = require('../models/db.model.js');
+const jwt = require('jsonwebtoken');
 
 
 
 
-
-export const signUp =  async (req,res)=>{
+const signUp =  async (req,res)=>{
 
     const{name,email,phone,password}= req.body
 
@@ -62,7 +63,7 @@ export const signUp =  async (req,res)=>{
     
 }
 
- let currentUserNumber  //.....the user who login its get from database .....//
+ 
  
 
 
@@ -89,10 +90,9 @@ export const signUp =  async (req,res)=>{
 
 
 
-
-export const logIn = async(req,res)=>{
+ const logIn = async(req,res)=>{
     const{num,pass} =req.body
-    currentUserNumber = num 
+  
   try{
      if( !num || !pass){
          return res.status(401).json({message:'All fields are required'})
@@ -125,7 +125,7 @@ export const logIn = async(req,res)=>{
 
 
 
-export const logOut = async (req,res)=>{
+const logOut = async (req,res)=>{
   try{
     res.cookie('jwt',{maxAge:0})
     res.status(200).json({message:'logged out sucessfully'})
@@ -143,7 +143,7 @@ export const logOut = async (req,res)=>{
 
 
 
-export const contact = async (req,res)=>{
+ const contact = async (req,res)=>{
   const{name,phone,myPhone} =  req.body
   if(!name || !phone || !myPhone){
 
@@ -170,7 +170,7 @@ export const contact = async (req,res)=>{
 
 
 
-export const  mess = async (req,res)=>{
+ const  mess = async (req,res)=>{
   const{sentPhone,recivePhone,message}=req.body
 
   try{
@@ -232,24 +232,49 @@ if(up){
 
 
 
-/////////////// after login validate and sent data to front end
- export const validate = async (req,res)=>{
-  console.log(currentUserNumber)
-  const user = await User.findOne({phone:currentUserNumber})
 
-res.json({
-  user: {
-    ...user.toObject(),
-    profilePicture:{
-       
-          contentType: user.profilePicture.contentType,
-          data: user.profilePicture.data.toString('base64')
-    }
-        
-      
+/////////////// after login validate and sent data to front end \\\\\\\\\\\\\\\\
+ const validate = async (req,res)=>{
+  const id = req.params.id
+  
+  const decoded = jwt.decode(req.cookies.jwt)
+    
+  console.log("validate user id:",decoded)
+  if(!id){
+    console.log('noid')
+    return(res.send("there is no id"))
   }
-});
-  console.log(currentUserNumber)
+ console.log("id",id)
+  const user = await User.findById(decoded.userId)
+  try{
+    if (user.profilePicture) {
+     return res.json({
+       user: {
+         ...user.toObject(),
+         profilePicture: {
+
+           contentType: user.profilePicture.contentType,
+           data: user.profilePicture.data.toString('base64')
+         }
+
+       }
+     });
+
+   }
+  
+   
+   
+
+
+  }
+  catch{
+     return res.json({message:'data without image',user})
+   
+  }
+
+   
+
+
 
 
  }
@@ -273,7 +298,7 @@ res.json({
 
 const userSocketMap = {};
 
-export const ioConnection =async (socket) => {
+ const ioConnection = async (socket) => {
   const phone = socket.handshake.auth?.phone;
   if (!phone) {
     console.log("❌ Phone not provided");
@@ -356,7 +381,7 @@ export const ioConnection =async (socket) => {
 };
 
 
-export const fetchMessage = async (req, res) => {
+ const fetchMessage = async (req, res) => {
   const { myPhone, contactPhone } = req.body;
 
   try {
@@ -390,7 +415,7 @@ export const fetchMessage = async (req, res) => {
 ///=================================================================addding contact to database
 
 
-export const addContact = async (req, res) => {
+ const addContact = async (req, res) => {
   const {name,phone,myphone}=req.body
   try{
     if (!name || !phone || !myphone) {
@@ -445,4 +470,4 @@ export const addContact = async (req, res) => {
 
  
 
-
+module.exports = { signUp,logIn,logOut,contact,mess,validate,ioConnection,fetchMessage,addContact };

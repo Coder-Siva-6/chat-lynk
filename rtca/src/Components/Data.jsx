@@ -11,6 +11,7 @@ import Chats from './chats';
 import ChatsInput from './chatinput'
 import ContactList from './contacctlist'
 import ChatWindow from './chatwindow'
+import { FaBuildingCircleCheck } from 'react-icons/fa6';
 
 
 
@@ -112,7 +113,11 @@ const Data = ({user}) => {
       console.error('Error fetching messages:', err);
     }
   };
+  function handleChatExit() {
+    document.querySelector('#chat-window').classList.add('hidden');
+    document.querySelector('#contact-list').classList.remove('hidden');
 
+  }
 
 
 
@@ -168,7 +173,7 @@ const Data = ({user}) => {
       {/*------------------------------- --------Chat Window------------------------------------ */}
             <div id='chat-window' className="  relative hidden md:block w-full  flex flex-col overflow-y-auto   ">
         {/* chat window Header */}
-         <ChatWindow inonline={inonline} selectedContact={selectedContact} user={user} />  
+         <ChatWindow handleChatExit={handleChatExit} inonline={inonline} selectedContact={selectedContact} user={user} />  
         {/*------------------------------------------ Messages------------------------------------*/}
         <Chats  messages={messages}  /> 
         {/* Input Box */}

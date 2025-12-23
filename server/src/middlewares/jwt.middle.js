@@ -1,11 +1,13 @@
-import jwt from 'jsonwebtoken'
-import User from '../models/db.model.js'
+const jwt = require('jsonwebtoken');
 
 
 
 
-export const verifyToken= async(req,res,next)=>{
-    const token = req.cookies.jwt 
+
+
+module.exports = {
+  verifyToken: async (req, res, next) => {
+    const token = req.cookies.jwt;
 
     if (!token) 
         {
@@ -23,4 +25,4 @@ export const verifyToken= async(req,res,next)=>{
     return res.status(403).send({ message: "Invalid or expired token" });
   }
 
-}
+}}

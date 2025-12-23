@@ -1,19 +1,28 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import { verifyToken } from './src/middlewares/jwt.middle.js'
-import {connectDB} from './src/lib/db.js'
-import {signUp,logIn,logOut,contact,mess,validate,ioConnection,fetchMessage,addContact} from './src/controllers/auth.controller.js'
-import cookieParser from 'cookie-parser'
-import cors from 'cors'
-import { Server } from 'socket.io'
-import http from 'http'
-import mongoose from 'mongoose'
-import multer from 'multer'
-import path from 'path'
-import { fileURLToPath } from 'url';
-import User from './src/models/db.model.js'
-import crypto from 'crypto'
-
+const express = require('express');
+const dotenv = require('dotenv');
+const { verifyToken } = require('./src/middlewares/jwt.middle.js');
+const { connectDB } = require('./src/lib/db.js');
+const {
+  signUp,
+  logIn,
+  logOut,
+  contact,
+  mess,
+  validate,
+  ioConnection,
+  fetchMessage,
+  addContact
+} = require('./src/controllers/auth.controller.js');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const { Server } = require('socket.io');
+const http = require('http');
+const mongoose = require('mongoose');
+const multer = require('multer');
+const path = require('path');
+const { fileURLToPath } = require('url');
+const User = require('./src/models/db.model.js');
+const crypto = require('crypto');
 
 dotenv.config()
 const app = express()
@@ -58,7 +67,7 @@ app.patch('/post/:id', verifyToken, (req, res) => {
 
 app.post('/contacts', contact)
 app.post('/mess', mess)
-app.get('/validate', verifyToken, validate)
+app.get('/validate/:id', verifyToken,validate)
 
 server.listen(PORT, (err) => {
   if (err) console.log("Server error:", err)
@@ -78,8 +87,8 @@ app.post('/add-contact', addContact)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+//  const __filename = fileURLToPath(import.meta.url);
+//  const __dirname = path.dirname(__filename);
 
 
 

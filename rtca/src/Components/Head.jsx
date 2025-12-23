@@ -31,6 +31,9 @@ const Head = ({ user }) => {
             const formData = new FormData();
             formData.append('image', file);
             formData.append('phone', phone);
+            setTimeout(()=>{
+                        setProfilePicture(!profilePicture)
+                    },2000)
 
 
             await axios.post(`${backendUrl}/upload`, formData, {
@@ -38,9 +41,7 @@ const Head = ({ user }) => {
             })
                 .then((response) => {
                     console.log('Image uploaded successfully:', response.data);
-                    setTimeout(()=>{
-                        setProfilePicture(!profilePicture)
-                    },2000)
+                    
                     
                 })
                 .catch((error) => { console.error('Error uploading image:', error); });
@@ -76,7 +77,7 @@ const Head = ({ user }) => {
                                 ? `data:${user.profilePicture.contentType};base64,${user.profilePicture.data}`
                                 : profile // <-- replace with your fallback image path
                         }
-                        alt="Profile"
+                        alt={profile}
                         className="w-8 h-8 md:w-12 md:h-12 md:mx-5 shadow-2xl shadow-amber-600 rounded-full object-cover "
                         style={{ backgroundPosition: 'center', backgroundSize: 'cover' }}
                     />

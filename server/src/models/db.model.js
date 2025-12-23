@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { type } from "node:os";
+const mongoose = require('mongoose');
+const { type } = require('os');
 
 //  Message Sub-schema with timestamps
 const messageSchema = new mongoose.Schema(
@@ -82,4 +82,6 @@ const userSchema = new mongoose.Schema(
 
 
 const User = mongoose.model('user',userSchema)
-export default User
+
+
+module.exports = User ;
